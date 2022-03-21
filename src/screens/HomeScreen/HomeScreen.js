@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {  StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native'
-import Header from '../components/home/Header'
-import Stories from '../components/home/Stories'
-import Post from '../components/home/Post'
-import POSTS from '../data/posts'
-import BottomTabs, { bottomTabIcons } from '../components/home/BottomTabs'
+import Header from '../../components/home/Header'
+import Stories from '../../components/home/Stories'
+import Post from '../../components/home/Post'
+import POSTS from '../../data/posts'
+import BottomTabs, { bottomTabIcons } from '../../components/home/BottomTabs'
 
 
 
@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
         <Post key={index} post={post} /> 
        ))}
       </ScrollView>
-      <BottomTabs icons={bottomTabIcons} />
+      <BottomTabs  icons={bottomTabIcons} />
       </SafeAreaView> 
   )
 }

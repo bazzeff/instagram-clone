@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { Divider } from "react-native-elements";
+import { authentication, db } from './firebase/firebase-config' 
+import { doc, collection, updateDoc } from "firebase/firestore"; 
 
 const postFooterIcons = [
   {
@@ -24,13 +26,32 @@ const postFooterIcons = [
 ];
 
 const Post = ({ post }) => {
+  const handleLike = post => {
+    const currentLikeStatus = !post.likes_by_users.includes(
+      authentication.currentUser.email
+    )
+    db.collection('users')
+    .doc(post.owner_email)
+    .collection('posts')
+    .doc(post.id)
+    .updateDoc({
+      likes_by_users: currentLikeStatus ? FieldValue.arrayUnion(authentication.currentUser.email)
+      :  FieldValue.arrayRemove(authentication.currentUser.email)
+    })
+    .then(() => {
+      console.log('Document successful updated')
+    })
+    .catch((error => {
+      console.log('Error updating document: ', error)
+    }))
+  }
   return (
     <View style={styles.postContainer}>
       <Divider width={1} orientation="vertical" />
       <PostHeader post={post} />
       <PostImage post={post} />
       <View style={styles.postFooter}>
-        <PostFooter />
+        <PostFooter post={post} handleLike={handleLike} />
         <Likes post={post} />
         <Caption post={post} />
         <CommentsSection post={post} />
@@ -56,10 +77,13 @@ const PostImage = ({ post }) => (
     <Image source={{ uri: post.imageUrl }} style={styles.postImage} />
   </View>
 );
-const PostFooter = () => (
+const PostFooter = ({ handleLike, post }) => (
   //
   <View style={styles.postFooterIcons}>
     <View style={styles.leftFooterIconContainer}>
+    <TouchableOpacity onPress={() => handleLike(post)}>
+     <Image style={styles.footerIcon} source={{ uri: post.likes_by_users.includes(authentication.currentUser.email) ? postFooterIcons[0].likedImageUrl : postFooterIcons[0].imageUrl, }} />
+     </TouchableOpacity>
       <Icon imgStyle={styles.footerIcon} imgUrl={postFooterIcons[0].imageUrl} />
       <Icon imgStyle={styles.footerIcon} imgUrl={postFooterIcons[1].imageUrl} />
       <Icon
@@ -84,7 +108,7 @@ const Icon = ({ imgStyle, imgUrl }) => (
 const Likes = ({ post }) => (
   <View style={styles.likeContainer}>
     <Text style={styles.likes}>
-      {ontransitioncancel.likes.toLocaleString("en")} likes
+      {post.likes_by_users.length.toLocaleString('en')} likes
     </Text>
   </View>
 );

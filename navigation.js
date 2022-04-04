@@ -1,13 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from './screens/HomeScreen';
-import NewPostScreen from './screens/NewPostScreen';
-import NotificationScreen from './screens/NotificationScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import SettingScreen from './screens/SettingScreen';
+import HomeScreen from './src/screens/Home/HomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/LoginScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
+import NewPostScreen from './src/screens/NewPostScreen/NewPostScreen';
 
 
 const Stack = createStackNavigator();
@@ -17,19 +16,23 @@ const screenOption = {
     headerShown: false,
 }
 
-const navigation = () => {
+export const SignInStack = () => {
   <NavigationContainer>
-      <Stack.Navigator initialRouteName='HomeScreen' screenOption={screenOption}>
+      <Stack.Navigator initialRouteName='Home' screenOption={screenOption}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="NewPostScreen" component={NewPostScreen} />
-      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-      <Stack.Screen name="SettingScreen" component={SettingScreen} /> 
-      <Stack.Screen name="LoginScreen" component={LoginScreen} /> 
     </Stack.Navigator>
   </NavigationContainer>
 }
 
-export default navigation
+export const SignOutStack = () => {
+  <NavigationContainer>
+      <Stack.Navigator initialRouteName='LoginScreen' screenOption={screenOption}>
+      <Stack.Screen name="LoginScreen" component={LoginScreen} /> 
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen} /> 
+      <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} /> 
+    </Stack.Navigator>
+  </NavigationContainer>
+} 
 
 const styles = StyleSheet.create({})
